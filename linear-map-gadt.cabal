@@ -1,0 +1,28 @@
+Name:                linear-map-gadt
+Version:             0.0.0
+Cabal-Version:       >= 1.6
+Synopsis:            Linear maps as GADT
+Category:            
+Description:
+  Linear maps as GADT
+Author:              Conal Elliott
+Maintainer:          conal@conal.net
+Copyright:           (c) 2012 by Conal Elliott
+License:             BSD3
+License-File:        COPYING
+Stability:           experimental
+build-type:          Simple
+
+source-repository head
+  type:     git
+  location: git://github.com/conal/linear-map-gadt.git
+
+Library
+  hs-Source-Dirs:      src
+  Extensions:
+  Build-Depends:       base<5
+  Exposed-Modules:     
+                       Data.GADT.LinearMap
+                       Control.ConstraintKinds.Category
+                       
+  ghc-options:         -Wall
