@@ -39,6 +39,7 @@ infixr 9 .
 --   id and (.) must form a monoid.
 class Category cat where
     type CategoryConstraint cat a b :: Constraint
+    -- type CategoryConstraint cat a b = CategoryConstraint0 cat a b
     type CategoryConstraint cat a b = CategoryConstraint0 cat a b
     -- | the identity morphism
     id :: CategoryConstraint cat a a =>
@@ -47,6 +48,7 @@ class Category cat where
     (.) :: (CategoryConstraint cat a b, CategoryConstraint cat b c) =>
            cat b c -> cat a b -> cat a c
 
+-- Workaround for problem with empty default associated constraints.
 class CategoryConstraint0 (cat :: * -> * -> *) a b
 instance CategoryConstraint0 cat a b
 

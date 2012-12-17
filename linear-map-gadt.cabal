@@ -1,10 +1,11 @@
 Name:                linear-map-gadt
-Version:             0.0.0
+Version:             0.1.0
 Cabal-Version:       >= 1.6
-Synopsis:            Linear maps as GADT
+Synopsis:            Linear maps as a GADT
 Category:            
 Description:
-  Linear maps as GADT
+  Linear maps as a GADT.
+  See <http://conal.net/blog/posts/reimagining-matrices/>
 Author:              Conal Elliott
 Maintainer:          conal@conal.net
 Copyright:           (c) 2012 by Conal Elliott
@@ -20,7 +21,7 @@ source-repository head
 Library
   hs-Source-Dirs:      src
   Extensions:
-  Build-Depends:       base<5
+  Build-Depends:       base<5, ghc-prim, vector-space
   Exposed-Modules:     
                        Data.GADT.LinearMap
                        Control.ConstraintKinds.Category
