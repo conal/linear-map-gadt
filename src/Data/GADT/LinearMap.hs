@@ -17,7 +17,9 @@
 -- Maintainer  :  conal@tabula.com
 -- Stability   :  experimental
 -- 
--- Linear transformation as category & arrow
+-- Linear transformation as category & arrow.
+-- See <http://conal.net/blog/posts/reimagining-matrices/>
+-- for motivation and derivations.
 ----------------------------------------------------------------------
 
 module Data.GADT.LinearMap ((:-*)(..),apply,fstL,sndL) where
@@ -101,32 +103,8 @@ instance Category (:-*) where
   Dot s  . Dot b     = Dot (s *^ b)          -- s must be scalar
   Dot ab . (f :&& g) = Dot a . f ^+^ Dot b . g where (a,b) = ab
 
-{- Derivations:
-
-   apply ((f :&& g) . h)
-== (apply f &&& apply g) . apply h
-== apply f . apply h &&& apply g . apply h
-== apply (f . h &&& g . h)
-
-(f &&& g) . h == f . h &&& g . h
-
-   apply (Dot s . Dot b)  -- s must be scalar
-== dot s . dot b
-== dot (s *^ b)
-== apply (Dot (s *^ b))
-
-dot s . dot b == dot (s *^ b)  -- s must be scalar
-
-   apply (Dot (a,b) . (f :&& g))
-== dot (a,b) . (apply f &&& apply g)
-== add . (dot a . apply f &&& dot b . apply g)
-== apply (Dot a . f ^+^ Dot b . g)
-
-dot (a,b) == add . (dot a *** dot b)
-
 -- The GHC 7.4.1 type-checker balks at the Dot (a,b) pattern, so I used a where.
 
--}
 
 instance CategoryProduct (:-*) where
   type CP12 (:-*) a   c d = VS3 a   c d
@@ -136,21 +114,6 @@ instance CategoryProduct (:-*) where
   -- Equivalently,
   -- f *** g = f . fstL &&& g . sndL
 
-{- Derivations
-
-   apply (f &&& g)
-== apply f &&& apply g
-== apply (f :&& g)
-
-   apply (f *** g)
-== apply f *** apply g
-== apply f . fst &&& apply g . snd
-== apply (compFst f) &&& apply (compSnd g)
-== apply (compFst f :&& compSnd g)
-
--}
-
-
 instance VS2 a b => AdditiveGroup (a :-* b) where
   zeroV   = zeroL
   negateV = (scale (-1) .)
@@ -159,22 +122,6 @@ instance VS2 a b => AdditiveGroup (a :-* b) where
   _         ^+^ _         = error "(^+^) for a :-* b: unexpected combination"
 
 -- The last case cannot arise unless pairs are scalars.
-
--- Derivation from apply (f ^+^ g) == apply f ^+^ apply g :
--- 
---    apply (Dot b ^+^ Dot c)
--- == dot b ^+^ dot c
--- == dot (b ^+^ c)
--- == apply (Dot (b ^+^ c))
---
---    apply ((f :&& g) ^+^ (h :&& k))
--- == (apply f &&& apply g) ^+^ (apply h &&& apply k)
--- == (apply f ^+^ apply h) &&& (apply g ^+^ apply k)
--- == apply ((f ^+^ h) &&& (g ^+^ k))
--- 
--- Uses (on functions):
---
---   (f &&& g) ^+^ (h &&& k) == (f ^+^ h) &&& (g ^+^ k)
 
 instance VS2 a b => VectorSpace (a :-* b) where
   type Scalar (a :-* b) = Scalar b
